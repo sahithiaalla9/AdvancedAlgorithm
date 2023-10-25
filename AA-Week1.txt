@@ -1,0 +1,26 @@
+#include <iostream>
+int main() {
+    int target;
+    int count;
+    std::cin>>target;
+    const int MAX_SIZE = 104;
+    int nums[MAX_SIZE]; 
+    int a;
+    int i=0;
+    while (std::cin >> a) {
+    nums[i++] = a;
+    count++;
+    }
+
+    for (int x=0; x<count ; x++)
+    {
+        for(int j =1; j<count; j++)
+            if((nums[x]+nums[j]) == target)
+            {
+                
+                std::cout<<"[" <<x <<" " <<j <<"]";
+                exit(0);
+            }
+            
+    }
+}
