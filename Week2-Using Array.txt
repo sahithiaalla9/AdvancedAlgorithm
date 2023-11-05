@@ -1,0 +1,63 @@
+
+//SPARSE MATRIX IMPLEMENTATION USING AN ARRAY
+#include <iostream>
+using namespace std;
+
+int main() {
+    int Matrix[10][10] = {
+        {0, 0, 3, 0, 4},
+        {0, 0, 5, 7, 0},
+        {0, 0, 0, 0, 0},
+        {0, 2, 6, 0, 0}
+    };
+
+    int row = 4;
+    int column = 5;
+
+    // Printing Matrix
+    cout << "The Matrix is:" << "\n";
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < column; j++) {
+            cout << Matrix[i][j] << " ";
+        }
+        cout << "\n";
+    }
+    cout << "\n";
+    
+
+    // Size of the Matrix
+    int size = 0;
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < column; j++) {
+            if (Matrix[i][j] != 0) {
+                size++;
+            }
+        }
+    }
+
+    
+    int SparseMatrix[3][size];
+    int count = 0;
+
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < column; j++) {
+            if (Matrix[i][j] != 0) {
+                SparseMatrix[0][count] = i;
+                SparseMatrix[1][count] = j;
+                SparseMatrix[2][count] = Matrix[i][j];
+                count++;
+            }
+        }
+    }
+
+    // Printing the final Matrix
+    cout << "The Sparse Matrix Representation is:" << "\n";
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < size; j++) {
+            cout << SparseMatrix[i][j] << "\t";
+        }
+        cout << "\n";
+    }
+
+    return 0;
+}
