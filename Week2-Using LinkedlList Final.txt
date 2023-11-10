@@ -1,0 +1,90 @@
+//SPARSE MATRIX USING LINKED LIST
+
+#include <iostream>
+using namespace std;
+
+// Defining a class inorder to represent each node in the linked list.
+class SparseMatrixUsingLinkedList {
+public:
+    int row;
+    int col;
+    int value;
+    SparseMatrixUsingLinkedList* next;
+    
+    // Constructor to initialize the node with row, column, and value.
+    SparseMatrixUsingLinkedList(int r, int c, int v) : row(r), col(c), value(v), next(nullptr) {}
+};
+
+// Creating a new Node.
+SparseMatrixUsingLinkedList* createNode(int row, int col, int value) {
+    return new SparseMatrixUsingLinkedList(row, col, value);
+}
+
+// Appending a new node to the linked list.
+void appendNode(SparseMatrixUsingLinkedList*& head, int row, int col, int value) {
+    SparseMatrixUsingLinkedList* newNode = createNode(row, col, value);
+
+    if (head == nullptr) {
+        head = newNode;
+    } else {
+        SparseMatrixUsingLinkedList* current = head;
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
+}
+
+// Printing the sparse matrix represented as a linked list
+void printSparseMatrix(SparseMatrixUsingLinkedList* head) {
+    if (head == nullptr) {
+        cout << "Sparse matrix is empty." << endl;
+        return;
+    }
+
+    SparseMatrixUsingLinkedList* current = head;
+    cout << "Sparse Matrix (row, col, value):" << endl;
+    cout<<"Start----> ";
+    while (current != nullptr) {
+        cout<<"(" << current->row << ", " << current->col << ", " << current->value << ", )" << "----> ";
+        current = current->next;
+    }
+    cout<<"NULL";
+}
+
+int main() {
+    
+    int row;
+    int column;
+    cout<<"Number of rows: ";
+    cin>>row;
+    cout<<"Number of columns: ";
+    cin>>column;
+    int sparseMatrix[row][column];
+    
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < column; j++) {
+            cin>>sparseMatrix[i][j];
+            
+        }
+    }
+    
+
+    SparseMatrixUsingLinkedList* sparseList = nullptr;
+    
+    
+     //Iterating through the 2-Dimensional array and adding all non-zero elements to the linked list.
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < column; j++) {
+            if (sparseMatrix[i][j] != 0) {
+                appendNode(sparseList, i, j, sparseMatrix[i][j]);
+            }
+        }
+    }
+
+    printSparseMatrix(sparseList);
+
+
+    return 0;
+}
+
