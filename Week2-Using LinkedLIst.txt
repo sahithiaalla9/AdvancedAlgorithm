@@ -42,10 +42,10 @@ void printSparseMatrix(SparseMatrixUsingLinkedList* head) {
     }
 
     SparseMatrixUsingLinkedList* current = head;
-    cout << "Sparse Matrix (row, col, value, Adrress of Next Node):" << endl;
-    cout<<"Start---->";
+    cout << "Sparse Matrix (row, col, value):" << endl;
+    cout<<"Start----> ";
     while (current != nullptr) {
-        cout<<"(" << current->row << ", " << current->col << ", " << current->value << ", )" << "---->";
+        cout<<"(" << current->row << ", " << current->col << ", " << current->value << ", )" << "----> ";
         current = current->next;
     }
     cout<<"NULL";
