@@ -1,0 +1,128 @@
+//Finding the cost and shortest path using Dijkstra Algorithm-part B
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <queue>
+#include <limits>
+#include <algorithm>
+
+using namespace std;
+
+// Defining Infinity as the maximum of numbers
+const int INF = numeric_limits<int>::max();
+
+// Class representing a graph
+class Graph 
+{
+public:
+    unordered_map<char, unordered_map<char, int>> adjacencyList;
+
+    // Function to add Edges and Graphs to the graph
+    void addEdgesAndWeights(char from, char to, int weight) 
+    {
+        adjacencyList[from][to] = weight;
+    }
+
+    // Dijkstra's algorithm 
+    pair<int, vector<char>> dijkstraAlgorithm(char start, char end) 
+    {
+        
+        // Priority queue Initialization
+        priority_queue<pair<int, char>, vector<pair<int, char>>, greater<pair<int, char>>> pq;
+        
+        //Here all the nodes are unvisited nodes
+        unordered_map<char, int> distance;
+        unordered_map<char, char> parent;
+        vector<char> path;
+
+       
+        // Initilazing the remaining verticies distances as INFINITY
+        for (auto& it : adjacencyList) 
+        {
+            distance[it.first] = INF;
+        }
+        
+         // Initilazing Distance of the start node as 0
+        distance[start] = 0;
+        pq.push({0, start}); 
+        
+        
+        
+        while (!pq.empty()) 
+        {
+            //Setting Initial node as Current node
+            char current = pq.top().second;
+            int currentDistance = pq.top().first;
+            pq.pop();
+            if (currentDistance > distance[current]) 
+            {
+                continue;
+            }
+
+            for (auto& neighbour : adjacencyList[current]) 
+            {
+                char nextNode = neighbour.first;
+                int weight = neighbour.second;
+                if (distance[current] + weight < distance[nextNode]) 
+                {
+                    distance[nextNode] = distance[current] + weight;
+                    parent[nextNode] = current;
+                    pq.push({distance[nextNode], nextNode});
+                }
+            }
+        }
+
+        //Path Reconstruction
+        //Marking nodes as Visited
+        char currentNode = end;
+        while (currentNode != start) 
+        {
+            path.push_back(currentNode);
+            currentNode = parent[currentNode];
+        }
+        path.push_back(start);
+        reverse(path.begin(), path.end());
+
+        return {distance[end], path};
+    }
+};
+
+// Main function
+int main() 
+{
+    
+    // Creating a graph object
+    Graph graph;
+
+    // Add edges and weights to the graph
+    graph.addEdgesAndWeights('A', 'B', 10);
+    graph.addEdgesAndWeights('A', 'E', 3);
+    graph.addEdgesAndWeights('B', 'C', 2);
+    graph.addEdgesAndWeights('B', 'E', 4);
+    graph.addEdgesAndWeights('C', 'D', 9);
+    graph.addEdgesAndWeights('D', 'C', 7);
+    graph.addEdgesAndWeights('E', 'B', 1);
+    graph.addEdgesAndWeights('E', 'C', 8);
+    graph.addEdgesAndWeights('E', 'D', 2);
+
+    // Taking inputs from the user for Starting and ending nodes
+    char startingNode, endingNode;
+    cout << "Enter Starting node: ";
+    cin >> startingNode;
+    cout << "Enter Ending node: ";
+    cin >> endingNode;
+
+    // Finding the shortest path
+    auto shortest_path = graph.dijkstraAlgorithm(startingNode, endingNode);
+    //Printing the shortest path
+    cout << "\nCost of the Shortest Path: " << shortest_path.first << endl;
+ 
+    //Printing the Path 
+    cout << "\nPath of the Lowest Cost from " << startingNode << " to " << endingNode << " is: ";
+    for (char eachNode : shortest_path.second) 
+    {
+        cout << eachNode << "  ";
+    }
+    
+    return 0;
+}
