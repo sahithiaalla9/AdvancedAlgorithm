@@ -1,0 +1,96 @@
+//IMPLEMENTATION OF LONGEST COMMON SUBSTRING USING DYNAMIC PROGRAMMING
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Function for printing the Dynamic Programming table
+void printDPTable(const vector<vector<int>>& dp) 
+{
+    for (const auto& row : dp) 
+    {
+        for (int val : row) 
+        {
+            cout << val << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Function for finding the longest common substring of two strings
+string longestCommonSubstring(const string& str1, const string& str2) 
+{
+    //Checking if both the strings are empty or not
+    if (str1.empty() || str2.empty()) 
+    {
+        cerr << "There must be at least a single shared character in both strings." <<endl;
+        return "";  //Return empty string if there is no macthing sequence
+        
+    }
+
+    // Getting the lengths of the input strings
+    int str1_len,str2_len;
+    str1_len = str1.length();
+    str2_len = str2.length();
+
+    // Variables to track the length of the longest common substring and its ending position
+    int maxLen = 0;
+    int endIndex = 0;
+    
+    // Creating a 2D vector to store the lengths of common substrings
+    vector<vector<int>> dp(str1_len + 1, vector<int>(str2_len + 1, 0));
+
+    // Filling the Dynamic Programming grid table
+    for (int i = 1; i <= str1_len; ++i) 
+    {
+        for (int j = 1; j <= str2_len; ++j) 
+        {
+            // Checking if the characters at the current positions match
+            if (str1[i - 1] == str2[j - 1]) 
+            {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+
+                // Update if a longer common substring is found
+                if (dp[i][j] > maxLen) 
+                {
+                    maxLen = dp[i][j];
+                    endIndex = i - 1;
+                }
+            }
+        }
+    }
+
+    // Print the DP table
+    cout << "Dynamic Programming Table:" <<endl;
+    printDPTable(dp);
+
+    // Extract the longest common substring
+    string lc_substring;
+    lc_substring = str1.substr(endIndex - maxLen + 1, maxLen);
+    return lc_substring;
+}
+
+// Main function
+int main() 
+{
+    // Initializing two strings 
+    string string1; 
+    string string2;
+
+    // Taking two string as an input from user
+    cout << "Enter the First String: ";
+    cin >> string1;
+
+    cout << "Enter the Second String: ";
+    cin >> string2;
+
+    //Finding the longest Common Substring
+    string lcs_result;
+    lcs_result = longestCommonSubstring(string1, string2);
+
+    // Displaying the result
+    cout << "Longest Common Substring is: " << lcs_result <<endl;
+
+    return 0;
+    
+}
