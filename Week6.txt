@@ -1,0 +1,105 @@
+//PROGRAM TO BUILD A HUFFMAN TREE TO PRINT ALL THE HUFFMAN CODES IN THE PRE-ORDER TRAVERSAL
+
+#include <iostream>
+#include <queue>
+#include <vector>
+
+using namespace std;
+
+// Class for a node in the Huffman tree
+class HuffmanNode 
+{
+public:
+    char data;
+    int freq;
+    HuffmanNode *left, *right;
+
+    HuffmanNode(char data, int freq) : data(data), freq(freq), left(nullptr), right(nullptr) {}
+};
+
+// Comparison function for the priority queue
+class CompareNodes 
+{
+public:
+    bool operator()(HuffmanNode* Node1, HuffmanNode* Node2) 
+    {
+        return Node1->freq > Node2->freq;
+    }
+};
+
+// Function to build the Huffman tree
+HuffmanNode* buildHuffmanTree(string S, int f[]) 
+{
+    priority_queue<HuffmanNode*, vector<HuffmanNode*>, CompareNodes> pq;
+
+    
+    for (int i = 0; i < S.size(); ++i) 
+    {
+        pq.push(new HuffmanNode(S[i], f[i]));
+    }
+
+    
+    while (pq.size() > 1) 
+    {
+        HuffmanNode* left = pq.top();
+        pq.pop();
+
+        HuffmanNode* right = pq.top();
+        pq.pop();
+
+        HuffmanNode* internalNode = new HuffmanNode('$', left->freq + right->freq);
+        internalNode->left = left;
+        internalNode->right = right;
+
+        pq.push(internalNode);
+    }
+
+    
+    return pq.top();
+}
+
+// Function to print Huffman codes in preorder traversal
+void printHuffmanCodes(HuffmanNode* root, string code) 
+{
+    if (root == nullptr) 
+    {
+        return;
+    }
+
+    
+    if (root->data != '$') 
+    {
+        cout << root->data << ": " << code << endl;
+    }
+
+    printHuffmanCodes(root->left, code + "0");
+
+    
+    printHuffmanCodes(root->right, code + "1");
+}
+
+int main() 
+{
+    //Taking String as an input from User
+    string S;
+    cout << "Enter the string: ";
+    cin >> S;
+
+    int N , f[N];
+    N = S.size();
+    
+    //Taking frequencies as an input from the user
+    cout << "Enter the frequencies f[]:" << endl;
+    for (int i = 0; i < N; ++i) 
+    {
+        cin >> f[i];
+    }
+
+    HuffmanNode* result = buildHuffmanTree(S, f);
+
+    cout << "Huffman Codes will be:" << endl;
+    printHuffmanCodes(result, "");
+
+    return 0;
+}
+
